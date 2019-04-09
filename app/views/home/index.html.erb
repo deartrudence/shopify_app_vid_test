@@ -1,9 +1,34 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<% content_for :javascript do %>
+  <script type="text/javascript">
+    ShopifyApp.ready(function(){
+      ShopifyApp.Bar.initialize({ title: "Home" });
+    });
+  </script>
+<% end %>
+<h2>Products</h2>
 
-<%= content_tag :div,
-  id: "hello-react",
-  data: {
-    name: 'JORDAN',
-}.to_json do %>
+<ul>
+  <% @products.each do |product| %>
+    <li><img src="<%= product.image.src %>" style="max-width: 100px" ><%= link_to product.title, "https://#{@shop_session.url}/admin/products/#{product.id}", target: "_top" %>
+      <ul>
+      <% product.images.each do |image| %>
+        <li><img src="<%= image.src %>" alt="" style="max-width: 100px"></li>
+      <% end %>
+      </ul>
+    </li>
+  <% end %>
+</ul>
+
+<hr>
+
+<h2>Webhooks</h2>
+
+<% if @webhooks.present? %>
+  <ul>
+    <% @webhooks.each do |webhook| %>
+      <li><%= webhook.topic %> : <%= webhook.address %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>This app has not created any webhooks for this Shop. Add webhooks to your ShopifyApp initializer if you need webhooks</p>
 <% end %>
