@@ -28,11 +28,19 @@ class ProductList extends Component {
 
 
 	render() {
-		const { products } = this.props
+		const { products, structure_words } = this.props
 		return (
-			<AppProvider>
+			<AppProvider
+				i18n={{
+					Polaris: {
+						ResourceList: {
+							showing: structure_words.number_items_showing
+						}
+					}
+				}}
+			>
 				<Page
-					title="My first app with Polaris"
+					title={structure_words.title}
 					primaryAction={{content: 'SAVE'}}
 				>
 					<Card>	

@@ -29,8 +29,8 @@
 # To learn more, please read the Rails Internationalization guide
 # available at http://guides.rubyonrails.org/i18n.html.
 
-en:
+fr:
   hello: "Hello world"
   structure_words:
-    title: "Lookbook App"
-    number_items_showing: "showing {itemsCount} {resource}"
+    title: "La Lookbook App"
+    number_items_showing: "FR showing {itemsCount} {resource}"
