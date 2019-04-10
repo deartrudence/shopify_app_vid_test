@@ -1,0 +1,10 @@
+<h1>Editing Stored Product</h1>
+
+<%= content_tag :div,
+  id: "product-edit",
+  data: {
+    structure_words: t('structure_words'),
+		product: @stored_product,
+		product_images: @product_images,
+  }.to_json do %>
+  <% end %>

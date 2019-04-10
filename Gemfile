@@ -11,6 +11,9 @@ gem 'rails', '~> 5.1.6', '>= 5.1.6.1'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 
+# helper for routes in JS
+gem "js-routes"
+
 #Shopify gem to connect to store
 gem 'shopify_app'
 # Use Puma as the app server

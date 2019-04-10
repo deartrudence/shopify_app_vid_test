@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :stored_products
   root :to => 'home#index'
   mount ShopifyApp::Engine, at: '/'
 
