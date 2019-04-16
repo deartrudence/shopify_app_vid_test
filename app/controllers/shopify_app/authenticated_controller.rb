@@ -8,6 +8,7 @@ module ShopifyApp
     before_action :login_again_if_different_shop
     around_action :shopify_session
     before_action :set_shop
+    
 
     def set_locale
       if @shop.present? && @shop.language.present?

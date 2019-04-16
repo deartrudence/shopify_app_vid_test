@@ -1,7 +1,9 @@
 class StoredProductsController < ShopifyApp::AuthenticatedController
   before_action :set_stored_product, only: [:show, :edit, :update, :destroy]
 
-  
+  def index
+    @stored_product = StoredProduct.all
+  end
 
   # GET /stored_products/1/edit
   def edit
