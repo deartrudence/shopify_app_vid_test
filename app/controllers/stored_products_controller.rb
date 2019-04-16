@@ -6,12 +6,25 @@ class StoredProductsController < ShopifyApp::AuthenticatedController
   # GET /stored_products/1/edit
   def edit
     @product_images = @stored_product.product_images
+    @blocks = @stored_product.blocks
   end
 
 
   # PATCH/PUT /stored_products/1
   # PATCH/PUT /stored_products/1.json
   def update
+    puts 'we made it to the edit'
+    puts params
+    @stored_product.blocks.destroy_all
+    params[:blocks].each do |block|
+      Block.where(block_id: block['block_id']).first_or_create do |this_block|
+        this_block.image_url = block['image_url']
+        this_block.block_type = block['block_type']
+        this_block.block_id = block['block_id']
+        this_block.block_text = block['block_text']
+        this_block.stored_product_id = @stored_product.id
+      end
+    end
     respond_to do |format|
       if @stored_product.update(stored_product_params)
         format.html { redirect_to @stored_product, notice: 'Stored product was successfully updated.' }
@@ -41,6 +54,6 @@ class StoredProductsController < ShopifyApp::AuthenticatedController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def stored_product_params
-      params.require(:stored_product).permit(:shopify_id, :shopify_title, :shopify_image_url, :shop_id)
+      params.require(:stored_product).permit(:shopify_id, :shopify_title, :shopify_image_url, :lookbook_html, :shop_id)
     end
 end
