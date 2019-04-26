@@ -33,4 +33,15 @@ en:
   hello: "Hello world"
   structure_words:
     title: "Lookbook App"
+    product_title: "Products"
+    save: 'save'
+    close: 'close'
     number_items_showing: "showing {itemsCount} {resource}"
+    item: 'item'
+    items: 'items'
+    choose_block: "Choose Block"
+    choose_image: "Choose an image for the block"
+    block1_title: "Left Aligned Text"
+    block2_title: "Right Aligned Text"
+    block3_title: "Heading with center image"
+    delete_block_title: "Delete Last Block"

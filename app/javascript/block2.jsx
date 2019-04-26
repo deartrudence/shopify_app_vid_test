@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class Block2 extends Component {
 
 	render() {
-		const { data, addAnchor, id, image_url, text } = this.props
+		const { id, image_url, text } = this.props
 		const blockText = text || "Edit this text with yours"
 		return (
 			<div style={{display: 'flex', alignItems: 'center'}}>

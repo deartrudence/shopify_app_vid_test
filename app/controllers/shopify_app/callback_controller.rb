@@ -12,12 +12,42 @@ module ShopifyApp
         install_scripttags
         perform_after_authenticate_job
 
-        redirect_to return_address
+        check_for_recurring_charge
+
+        # redirect_to return_addressc <-- take this out
       else
         flash[:error] = I18n.t('could_not_log_in')
         redirect_to login_url
       end
     end
+
+    def check_for_recurring_charge
+      # Create Recurring Charge
+      sess = ShopifyAPI::Session.new(shop_name, token)
+      ShopifyAPI::Base.activate_session(sess)
+      if ShopifyAPI::RecurringApplicationCharge.current
+        puts 'NO CHARGE 👌'
+        redirect_to return_address  #<-- move to here
+      else
+        puts 'create a charge 🙆'
+        create_recurring_application_charge
+      end
+    end
+
+    def create_recurring_application_charge
+      unless ShopifyAPI::RecurringApplicationCharge.current
+        recurring_application_charge = ShopifyAPI::RecurringApplicationCharge.new(
+            name: "Artisan Application",
+            price: 14.99,
+            return_url: "#{ENV["app_url"]}/activatecharge",
+            test: true,
+            trial_days: 15)
+        if recurring_application_charge.save
+          redirect_to recurring_application_charge.confirmation_url
+        end
+      end
+    end
+
 
     private
 

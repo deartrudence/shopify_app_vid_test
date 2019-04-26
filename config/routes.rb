@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   get 'front_end/index'
+  
+  get '/activatecharge', to: 'charges#activate_charge'
 
   resources :stored_products
   root :to => 'home#index'

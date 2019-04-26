@@ -1,23 +1,28 @@
 class StoredProductsController < ShopifyApp::AuthenticatedController
   before_action :set_stored_product, only: [:show, :edit, :update, :destroy]
 
-  def index
-    @stored_product = StoredProduct.all
-  end
+  # def index
+  #   @stored_product = StoredProduct.all
+  # end
 
   # GET /stored_products/1/edit
   def edit
-    @product_images = @stored_product.product_images
-    @blocks = @stored_product.blocks
+    if @stored_product.shop_id.to_i == @shop.id
+      @product_images = @stored_product.product_images
+      @blocks = @stored_product.blocks
+    else 
+      redirect_to root_path
+    end
   end
 
 
   # PATCH/PUT /stored_products/1
   # PATCH/PUT /stored_products/1.json
   def update
-    puts 'we made it to the edit'
-    puts params
+    #delete all the current blocks
     @stored_product.blocks.destroy_all
+
+    #rebuild all the new blocks
     params[:blocks].each do |block|
       Block.where(block_id: block['block_id']).first_or_create do |this_block|
         this_block.image_url = block['image_url']

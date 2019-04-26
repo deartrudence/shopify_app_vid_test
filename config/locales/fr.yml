@@ -33,4 +33,15 @@ fr:
   hello: "Hello world"
   structure_words:
     title: "La Lookbook App"
-    number_items_showing: "FR showing {itemsCount} {resource}"
+    product_title: "Des produits"
+    save: 'enregistrere'
+    close: 'fermer'
+    number_items_showing: "montrant {itemsCount} {resource}"
+    item: 'article'
+    items: 'articles'
+    choose_block: "Choisir Bloc"
+    choose_image: "Choisissez une image pour le bloc"
+    block1_title: "Texte aligné à gauche"
+    block2_title: "Texte aligné à droite"
+    block3_title: "En-tête avec image centrale"
+    delete_block_title: "Supprimer le dernier bloc"

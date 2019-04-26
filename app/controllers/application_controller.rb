@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :cors_preflight_check
-    after_action :cors_set_access_control_headers
+  after_action :cors_set_access_control_headers
 
   def cors_set_access_control_headers
     puts "INSIDE THE CORS"

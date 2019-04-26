@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { AppProvider, Page, Stack, Icon, TextStyle, Layout, Card, FormLayout, TextField, Checkbox, Select, ResourceList } from '@shopify/polaris';
+import { AppProvider, Page, Stack, TextStyle, Card, ResourceList, Pagination } from '@shopify/polaris';
 
 
 class ProductList extends Component {
@@ -36,14 +36,15 @@ class ProductList extends Component {
 				i18n={{
 					Polaris: {
 						ResourceList: {
-							showing: structure_words.number_items_showing
+							showing: structure_words.number_items_showing,
+							defaultItemPlural: structure_words.items,
+							defaultItemSingular: structure_words.item,
 						}
 					}
 				}}
 			>
 				<Page
 					title={structure_words.title}
-					primaryAction={{content: 'SAVE'}}
 				>
 					<Card>	
 						<ResourceList
@@ -51,7 +52,6 @@ class ProductList extends Component {
 							items={products}
 							renderItem={this.renderProduct}
 						>
-
 						</ResourceList>
 					</Card>
 				</Page>

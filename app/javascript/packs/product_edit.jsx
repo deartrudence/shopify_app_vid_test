@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { AppProvider, Page, Stack, Button, ResourcePicker,Modal, TextContainer, Layout, Card, FormLayout, TextField, Checkbox, Select, ResourceList, TextStyle } from '@shopify/polaris';
+import { AppProvider, Page, Stack, Button, Modal, Card, ResourceList} from '@shopify/polaris';
 import Block1 from '../block1.jsx'
 import Block2 from '../block2.jsx'
 import Block3 from '../block3.jsx'
@@ -11,7 +11,9 @@ class ProductEdit extends Component {
 		this.state = {
 			blocks: [],
 			resourcePickerOpen: false,
-			currentBlockType: 'Block1'
+			currentBlockType: 'Block1',
+			save_loading: false,
+			save_disabled: true
 		}
 		this.addBlock = this.addBlock.bind(this)
 		this.closeModal = this.closeModal.bind(this)
@@ -27,25 +29,24 @@ class ProductEdit extends Component {
 	}
 
 	addBlock(image_url) {
-		console.log('this is in the ADD BLOCK')
-		console.log("image", image_url)
+		this.setState({save_disabled: false})
 		this.setState({ blocks: [...this.state.blocks, { block_id: Math.round(Math.random() * 10000), block_text: 'new block', block_type: this.state.currentBlockType,  image_url: image_url }] })
 		this.closeModal()
 	}
 
 	deleteLastBlock(){
+		this.setState({ save_disabled: false })
 		let blocks = this.state.blocks.pop()
 		console.log(blocks)
 		this.setState(blocks)
 	}
 
 	saveLookbook(){
-		console.log('save lookbook')
+		this.setState({save_loading: true})
 		const lookbook_html = document.getElementById('allBlocks').innerHTML
 		let stored_product = this.state.stored_product
 		stored_product.lookbook_html = lookbook_html
-		this.setState({stored_product }, () => {
-			console.log('PROD', this.state.stored_product)
+		this.setState({ stored_product }, () => {
 			const data = {
 				blocks: this.state.blocks,
 				stored_product:this.state.stored_product
@@ -59,7 +60,10 @@ class ProductEdit extends Component {
 				body: JSON.stringify(data)
 			})
 				.then(res => res.json())
-				.then(resp => console.log(resp))
+				.then(resp => {
+					console.log(resp)
+					this.setState({save_loading: false, save_disabled: true})
+				})
 		})
 	}
 
@@ -88,36 +92,47 @@ class ProductEdit extends Component {
 
 	render() {
 		const { product, product_images, structure_words } = this.props
-		const { resourcePickerOpen } = this.state
+		const { resourcePickerOpen, save_loading, save_disabled } = this.state
 		return (
-			<AppProvider>
+			<AppProvider
+				i18n={{
+					Polaris: {
+						ResourceList: {
+							showing: structure_words.number_items_showing,
+							defaultItemPlural: structure_words.items,
+							defaultItemSingular: structure_words.item,
+						}
+					}
+				}}
+			>
 				<Page
-					breadcrumbs={[{ content: 'Products', url: Routes.root_path() }]}
+					breadcrumbs={[{ content: structure_words.product_title, url: Routes.root_path() }]}
 					title={product.shopify_title}
 					primaryAction={{ 
-						content: 'SAVE',
+						content: structure_words.save,
+						loading: save_loading,
+						disabled: save_disabled,
 						onAction: () => { this.saveLookbook() }
 					}}
-			
-		>
+				>
 					<Card
-						title="Choose Block"
+						title={structure_words.choose_block}
 						sectioned>
 						<Stack
 							distribution="fill">
-							<Button size="large" onClick={() => this.openModal('Block3')}>Heading with center image</Button>
-							<Button size="large" onClick={() => this.openModal('Block1')}>Left Aligned Text</Button>
-							<Button size="large" onClick={() => this.openModal('Block2')}>Right Aligned Text</Button>
-							<Button destructive size="large" onClick={() => this.deleteLastBlock()}>Delete Last Block</Button>
+							<Button size="medium" onClick={() => this.openModal('Block3')}>{structure_words.block3_title}</Button>
+							<Button size="medium" onClick={() => this.openModal('Block1')}>{structure_words.block1_title}</Button>
+							<Button size="medium" onClick={() => this.openModal('Block2')}>{structure_words.block2_title}</Button>
+							<Button destructive size="medium" onClick={() => this.deleteLastBlock()}>{structure_words.delete_block_title}</Button>
 						</Stack>
 					</Card>
 
 					<Modal
 						open={resourcePickerOpen}
 						onClose={this.closeModal}
-						title="Choose an image for the block"
+						title={structure_words.choose_image}
 						primaryAction={{
-							content: 'close',
+							content: structure_words.close,
 						}}
 					>
 						<Modal.Section>
@@ -135,11 +150,11 @@ class ProductEdit extends Component {
 							{this.state.blocks.map((block) => {
 								switch (block.block_type) {
 									case 'Block1':
-										return <Block1 image_url={block.image_url} text={block.block_text}/>
+										return <Block1 key={block.block_id} image_url={block.image_url} text={block.block_text}/>
 									case 'Block2':
-										return <Block2 image_url={block.image_url} text={block.block_text}/>
+										return <Block2 key={block.block_id} image_url={block.image_url} text={block.block_text}/>
 									case 'Block3':
-										return <Block3 image_url={block.image_url} text={block.block_text}/>
+										return <Block3 key={block.block_id} image_url={block.image_url} text={block.block_text}/>
 								}
 							})}
 						</div>
